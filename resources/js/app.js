@@ -3,16 +3,14 @@ const tableBody = document.getElementById('tableBody');
 const submitBtn = document.getElementById('submitBtn');
 const updateBtn = document.getElementById('updateBtn');
 
-//Graficas
+// Graficas
 const ctxHealth = document.getElementById('healthChart').getContext('2d');
 const ctxBreed = document.getElementById('breedChart').getContext('2d');
 
-let cattleArray = []; //Array para almacenar los animales
-let currenEditIndex = null; // Indice del animal que se va a editar
+let cattleArray = []; // Array para almacenar los animales
+let currentEditIndex = null; // Indice del animal que se va a editar
 
-
-
-// Inicializar las gráficas
+// Inicializar las gráfica 1
 const healthChart = new Chart(ctxHealth, {
     type: 'bar',
     data: {
@@ -27,7 +25,8 @@ const healthChart = new Chart(ctxHealth, {
         responsive: true
     }
  });
- 
+
+ // Inicializar las gráfica 2
  const breedChart = new Chart(ctxBreed, {
     type: 'pie',
     data: {
@@ -42,43 +41,42 @@ const healthChart = new Chart(ctxHealth, {
         responsive: true
     }
  });
- 
- //Evento para agregar un nuevo animal
+
+ // Evento para agregar un nuevo animal
 submitBtn.addEventListener('click', function() {
-   const animalID = document.getElementById('animalID').value;
-   const breed = document.getElementById('breed').value;
-   const age = document.getElementById('age').value;
-   const healthStatus = document.getElementById('healthStatus').value;
-
-
-   if (!animalID || !breed || !age || !healthStatus) {
-       alert("Por favor completa todos los campos.");
-       return;
-   }
-
-
-   const newAnimal = {
-       id: animalID,
-       breed: breed,
-       age: age,
-       healthStatus: healthStatus
-   };
-
-
-   cattleArray.push(newAnimal);
+    const animalID = document.getElementById('animalID').value;
+    const breed = document.getElementById('breed').value;
+    const age = document.getElementById('age').value;
+    const healthStatus = document.getElementById('healthStatus').value;
+ 
+ 
+    if (!animalID || !breed || !age || !healthStatus) {
+        alert("Por favor completa todos los campos.");
+        return;
+    }
+ 
+ 
+    const newAnimal = {
+        id: animalID,
+        breed: breed,
+        age: age,
+        healthStatus: healthStatus
+    };
+ 
+ 
+    cattleArray.push(newAnimal);
+ 
      // Actualizar la tabla y las gráficas
-     updateTable();
-     updateCharts();
-  
-  
-     cattleForm.reset();
-  });
+   updateTable();
+   updateCharts();
 
+
+   cattleForm.reset();
+});
 
 // Función para actualizar la tabla con los datos del array
 function updateTable() {
     tableBody.innerHTML = '';
- 
  
     cattleArray.forEach((animal, index) => {
         const row = document.createElement('tr');
@@ -95,6 +93,7 @@ function updateTable() {
         tableBody.appendChild(row);
     });
  }
+
  // Función para actualizar las gráficas
 function updateCharts() {
     const healthCounts = { sano: 0, enfermo: 0 };
@@ -116,24 +115,26 @@ function updateCharts() {
         }
         breedCounts[animal.breed]++;
     });
-// Actualizar gráfica de salud
-healthChart.data.datasets[0].data[0] = healthCounts.sano;
-healthChart.data.datasets[0].data[1] = healthCounts.enfermo;
-healthChart.update();
+ // Actualizar gráfica de salud
+ healthChart.data.datasets[0].data[0] = healthCounts.sano;
+ healthChart.data.datasets[0].data[1] = healthCounts.enfermo;
+ healthChart.update();
 
 
-// Actualizar gráfica de razas
-breedChart.data.labels = Object.keys(breedCounts);
-breedChart.data.datasets[0].data = Object.values(breedCounts);
-breedChart.update();
+ // Actualizar gráfica de razas
+ breedChart.data.labels = Object.keys(breedCounts);
+ breedChart.data.datasets[0].data = Object.values(breedCounts);
+ breedChart.update();
 }
+
 // Función para eliminar un registro de la tabla y del array
 function deleteRow(index) {
     cattleArray.splice(index, 1);
     updateTable();
     updateCharts();
  }
- // Función para editar un registro de la tabla
+ 
+// Función para editar un registro de la tabla
 function editRow(index) {
     currentEditIndex = index;
     document.getElementById('animalID').value = cattleArray[index].id;
@@ -145,7 +146,7 @@ function editRow(index) {
     submitBtn.style.display = 'none';
     updateBtn.style.display = 'block';
  }
- // Evento para actualizar el registro del animal
+// Evento para actualizar el registro del animal
 updateBtn.addEventListener('click', function() {
     const animalID = document.getElementById('animalID').value;
     const breed = document.getElementById('breed').value;
@@ -176,10 +177,7 @@ updateBtn.addEventListener('click', function() {
     updateCharts();
     cattleForm.reset();
  });
-
- 
- 
- 
+  
 
 
 
